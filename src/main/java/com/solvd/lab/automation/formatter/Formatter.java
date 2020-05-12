@@ -7,18 +7,17 @@ public class Formatter {
         String input = "public class NoSuchTransport extends Exception{public NoSuchTransport(String message) {super(message);if(aaa){aaa+b=5;return b;}}}";
         
         input = BraceUtil.normalizeSharpBraces(input);
-        input = StatementUtil.normalizeIfs(input);
-        input = StatementUtil.normalizeFors(input);
+        input = StatementUtil.normalizeStatement(input, "if");
+        input = StatementUtil.normalizeStatement(input, "for");
+        input = StatementUtil.normalizeSemicolons(input);
 
-        input = OperatorUtil.normalizePlus(input);
-        input = OperatorUtil.normalizeMinus(input);
-        input = OperatorUtil.normalizeMultiply(input);
-        input = OperatorUtil.normalizeDivide(input);
-        input = OperatorUtil.normalizeEq(input);
+        input = OperatorUtil.normalizeByOperator(input, '+');
+        input = OperatorUtil.normalizeByOperator(input, '-');
+        input = OperatorUtil.normalizeByOperator(input, '*');
+        input = OperatorUtil.normalizeByOperator(input, '/');
+        input = OperatorUtil.normalizeByOperator(input, '=');
 
         // input = SpaceUtil.normalizeSpaces(input);
-
-        input = StatementUtil.normalizeSemicolons(input);
         input = TabUtil.normalizeTabs(input);
 
         System.out.println(input);

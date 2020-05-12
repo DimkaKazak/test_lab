@@ -2,58 +2,27 @@ package com.solvd.lab.automation.formatter.util;
 
 public class StatementUtil {
 
-    public static String normalizeIfs(String input) {
-
+    public static String normalizeStatement(String input, String statement){
         StringBuilder result = new StringBuilder();
 
         char[] copiedCharArray = input.toCharArray();
         for (int i = 0; i < copiedCharArray.length; i++) {
 
-            if (copiedCharArray[i] == 'i' && copiedCharArray[i + 1] == 'f'
-                    && (copiedCharArray[i + 2] == ' ' || copiedCharArray[i + 2] == '(')) {
+            if (validateStatement(copiedCharArray, i, statement)){
 
-                result.append("if ");
+                switch (statement){
+                    case "if": result.append("if "); break;
+                    case "for": result.append("for "); break;
+                }
+
                 int indexOfBrace = input.indexOf('{', i);
-                result.append( input.substring( i + 2, indexOfBrace ) );
+                result.append( input.substring( i + statement.length(), indexOfBrace ) );
 
                 if(copiedCharArray[indexOfBrace - 1] == ' '){
                     result.append("{");
                 } else {
                     result.append(" {");
                 }
-
-
-                i = indexOfBrace;
-            }
-            else {
-                result.append(copiedCharArray[i]);
-            }
-        }
-
-        return String.valueOf(result);
-    }
-
-
-
-    public static String normalizeFors(String input) {
-        StringBuilder result = new StringBuilder();
-
-        char[] copiedCharArray = input.toCharArray();
-        for (int i = 0; i < copiedCharArray.length; i++) {
-
-            if (copiedCharArray[i] == 'f' && copiedCharArray[i + 1] == 'o' && copiedCharArray[i + 2] == 'r'
-                    && (copiedCharArray[i + 3] == ' ' || copiedCharArray[i + 3] == '(')) {
-
-                result.append("for ");
-                int indexOfBrace = input.indexOf('{', i);
-                result.append( input.substring( i + 3, indexOfBrace ) );
-
-                if(copiedCharArray[indexOfBrace - 1] == ' '){
-                    result.append("{");
-                } else {
-                    result.append(" {");
-                }
-
 
                 i = indexOfBrace;
             }
@@ -86,5 +55,17 @@ public class StatementUtil {
         }
 
         return String.valueOf(result);
+    }
+
+    private static boolean validateStatement(char[] elem, int pos, String statement){
+        switch (statement){
+            case "for": return elem[pos] == 'f' && elem[pos + 1] == 'o' && elem[pos + 2] == 'r'
+                    && (elem[pos + 3] == ' ' || elem[pos + 3] == '(');
+
+            case "if": return elem[pos] == 'i' && elem[pos + 1] == 'f'
+                    && (elem[pos + 2] == ' ' || elem[pos + 2] == '(');
+
+            default: return false;
+        }
     }
 }
